@@ -1,50 +1,37 @@
-//import { createCat, updatePartialCat } from './../../../../letsStart/src/cats/cats.service';
 import { CatsService } from './cats.service';
-import { Controller, HttpException } from '@nestjs/common';
-import {
-  Delete,
-  Get,
-  Patch,
-  Post,
-  UseFilters,
-  UseInterceptors,
-} from '@nestjs/common/decorators';
+import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
+import { UseFilters, UseInterceptors } from '@nestjs/common/decorators';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { CatRequestDto } from './dto/cats.request.dto';
 
 @Controller('cats')
 @UseInterceptors(SuccessInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
-  @Get()
+  @Get() //현재 로그인을 한 고양이
   getCurrentCat() {
-    //현재 로그인을 한 고양이
     return 'current cat';
   }
 
-  @Post()
+  @Post() //회원가입
   async signUp(@Body() body: CatRequestDto) {
-    //회원가입
-    console.log(body);
-    return 'signup';
+    return await this.catsService.signUp(body);
   }
 
-  @Post('login')
+  @Post('login') //로그인
   logIn() {
-    //로그인
     return 'login';
   }
 
-  @Post('logout')
+  @Post('logout') //로그아웃
   logOut() {
-    //로그아웃
     return 'logout';
   }
 
-  @Post('upload/cats')
+  @Post('upload/cats') //사진 올리기
   uploadCatImg() {
-    //사진 올리기
     return 'uploadImg';
   }
 }
